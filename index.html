@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Nirantar</title>
+		<meta name="author" content="Awesome Chaps"/>
+		<!-- Favicon -->
+		<link rel="shortcut icon" href="favicon.ico">
+		<link rel="icon" href="favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
+		<!-- bootstrap-select CSS -->
+		<link href="vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" type="text/css"/>
+		
+		<!-- Custom CSS -->
+		<link href="dist/css/style.css" rel="stylesheet" type="text/css">
+	</head>
+	
+	<!-- Nirantar Custom CSS Starts -->
+	<style type="text/css">
+		body{
+			overflow: hidden;
+		}
+		.gmap_canvas{
+            position: fixed;
+            left: 0;
+        }
+
+        .page-wrapper{
+        	padding-top: 0!important;
+        }
+
+        #search_image{
+        	position: absolute;
+        	left: 80px;
+        	top:300px;
+        }
+
+        #search_container{
+        	display: none;
+        	position: absolute;
+			left: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 100%;
+			width: 300px;
+        }
+        
+        #dashboard_container{
+        	display: none;
+        	position: absolute;
+			left: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 100%;
+			width: 500px;
+        }
+
+        #area_section_container{
+        	display: none;
+        	position: absolute;
+			left: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 100%;
+			width: 300px;
+        }
+
+        #topology_section_container{
+        	display: none;
+        	position: absolute;
+			left: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 100%;
+			width: 300px;
+        }
+
+        #legend_1_container{
+        	display: none;
+        	position: fixed;
+			right: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 300px;
+			width: 300px;
+			bottom: 40px;
+        }
+
+        #legend_2_container{
+        	display: none;
+        	position: fixed;
+			right: 90px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 300px;
+			width: 300px;
+			bottom: 40px;
+        }
+
+        #legend_3_container{
+        	display: block;
+        	position: fixed;
+			right: 130px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 300px;
+			width: 300px;
+			bottom: 40px;
+        }
+
+        #notification_container{
+        	display: none;
+        	position: absolute;
+			left: 50px;
+			background: white none repeat scroll 0% 0%;
+			z-index: 99;
+			height: 100%;
+			width: 300px;
+        }
+
+        #notification_container p{
+        	padding: 20px 10px;
+        }
+
+        .bootstrap-select{
+        	margin-bottom: 3px!important;
+        }
+
+        /*slider width controller*/
+        .slide-nav-toggle .fixed-sidebar-left:hover {
+    		width: 50px;
+		}
+
+		.wrapper.theme-1-active .fixed-sidebar-left{
+		    border-right: 0px solid #2a3e4c;
+		}
+	</style>
+	<!-- Nirantar CSS ends -->
+	<body>
+		<!--Preloader-->
+		<div class="preloader-it">
+			<div class="la-anim-1"></div>
+		</div>
+		<!--/Preloader-->
+		<div class="wrapper theme-1-active pimary-color-green">
+			<!-- Top Menu Items -->
+			<nav class="navbar navbar-inverse navbar-fixed-top" style="background: transparent;border:none;width: 0px">
+				<div class="mobile-only-brand pull-left">
+					<a id="toggle_nav_btn" class="toggle-left-nav-btn inline-block ml-10 pull-left" onclick="hide_elements();" style="color: #ffffff;position: relative;bottom: 10px;left: 5px;height: 0"><i class="zmdi zmdi-menu"></i></a>
+				</div>
+			</nav>
+			<!-- /Top Menu Items -->
+			
+			<!-- Left Sidebar Menu -->
+			<div class="fixed-sidebar-left" style="top:0px;z-index: 10;width: 50px!important">
+				<ul class="nav navbar-nav side-nav nicescroll-bar" style="padding-top: 44px;;">
+					<li id="li_search" title="Search">
+						<a href="javascript:void(0)" data-toggle="collapse" onclick="show_search_container()"><div class="pull-left"><i class="zmdi zmdi-search mr-20"></i><span class="right-nav-text">Search</span></div><div class="pull-right"><i class="zmdi zmdi-caret-right"></i></div><div class="clearfix"></div></a>
+					</li>
+					<li id="li_dashboard" title="Dashboard">
+						<a data-toggle="collapse" onclick="show_dashboard_container()"><div class="pull-left"><i class="zmdi zmdi-apps mr-20"></i><span class="right-nav-text">Dashboard</span></div><div class="pull-right"><i class="zmdi zmdi-caret-right"></i></div><div class="clearfix"></div></a>
+					</li>
+					<li><hr class="light-grey-hr mb-10"/></li>
+					<li id="li_area_section" title="Area Section">
+						<a data-toggle="collapse" onclick="show_area_section_container()"><div class="pull-left"><i class="zmdi zmdi-map mr-20"></i><span class="right-nav-text">Area Section</span></div><div class="pull-right"><i class="zmdi zmdi-caret-right"></i></div><div class="clearfix"></div></a>
+					</li>
+					<li id="li_notification" title="Notification" style="position: relative;top:10px;">
+						<a data-toggle="collapse" onclick="show_notification_container()"><div class="pull-left"><i class="zmdi zmdi-notifications-active mr-20"><span id="notification_badge" style="font-size: 12px;background:#2ECD99;border-radius: 20px;padding: 2px 5px;font-weight: 800;position: relative;bottom: 10px;right: 5px;">2</span></i><span class="right-nav-text">Notification</span></div><div class="pull-right"><i class="zmdi zmdi-caret-right"></i></div><div class="clearfix"></div></a>
+					</li>
+					<li id="li_print" title="Print" style="position: relative;top:15px;">
+						<a data-toggle="collapse" onclick=""><div class="pull-left"><i class="zmdi zmdi-print mr-20"></i><span class="right-nav-text">Print</span></div><div class="pull-right"><i class="zmdi zmdi-caret-right"></i></div><div class="clearfix"></div></a>
+					</li>
+				</ul>
+			</div>
+			<!-- Left Sidebar Menu Ends -->
+
+			<!-- Search container -->
+			<div id="search_container" class="example-basic" data-direction="left" >
+				<h3 style="background:#ECEFF1; padding: 10px;">Search<a onclick="hide_elements();"><i class="zmdi zmdi-arrow-left" style="margin-left: 150px; font-size: 20px;"></i></a></h3>
+				<form id="search_form" role="search" class="" style="padding: 5px;">
+					<div class="input-group">
+						<input type="text" name="example-input1-group2" class="form-control" placeholder="Enter text here...">
+						<span class="input-group-btn">
+						<button type="button" class="btn  btn-default" data-toggle="collapse" aria-label="Close" aria-expanded="true" onclick="show_search_results();" style="padding: 9px 25px 8px 25px;"><i class="zmdi zmdi-search" style="font-size: 20px;"></i></button>
+						</span>
+					</div>
+				</form>
+				<div id="search_results" style="display:none;padding: 10px;">
+					<p>search result 1</p>
+					<hr class="light-grey-hr mb-10"/>
+					<p>search result 2</p>
+					<hr class="light-grey-hr mb-10"/>
+					<p>search result 3</p>
+					<hr class="light-grey-hr mb-10"/>
+					<p>search result 4</p>
+					<hr class="light-grey-hr mb-10"/>
+				</div>
+				<div id="search_image">
+					<img src="dist/img/search_image.png">
+					<h5 style="color: #A1A6AA">Search Nirantar</h5>
+				</div>
+			</div>
+			<!-- Search container ends -->
+
+			<!-- Dashboard container -->
+			<div id="dashboard_container">
+				<h3 style="background:#ECEFF1; padding: 10px;">Dashboard<a onclick="hide_elements();"><i class="zmdi zmdi-arrow-left" style="margin-left: 290px; font-size: 20px;"></i></a></h3>
+				<img src="dist/img/sample_graph.png" style="width: 95%;">
+				<table class="table table-bordered" style="margin-left: 40px;margin-top:20px; width: 90%">
+                    <thead>
+                        <tr>
+                            <th>FSW</th>
+                            <th>MSM</th>
+                            <th>TG</th>
+                            <th>IDU</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>40</td>
+                            <td>30</td>
+                            <td>20</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+			<!-- Dashboard container ends -->
+
+			<!-- Area section container -->
+			<div id="area_section_container">
+				<h4 style="background:#ECEFF1; padding: 10px;">Area Section<a onclick="hide_elements();"><i class="zmdi zmdi-arrow-left" style="margin-left: 100px; font-size: 20px;"></i></a></h4>
+				<div style="padding: 10px 20px;">
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">State</option>
+						<option>Madhya Pradesh</option>
+						<option>Odisha</option>
+					</select>
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">District</option>
+						<option>Balod</option>
+						<option>Sidhi</option>
+					</select>
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Ti</option>
+						<option>Voluntary Association for Rural Reconstruction & Appropriate Technology (VARRAT)</option>
+						<option>Fellowship</option>
+					</select>
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Hotspot</option>
+						<option>mohalla rani ganj near jwalamukhi mandir panna pin 488001</option>
+						<option>Iklehar-basti</option>
+					</select>
+					<button class="btn  btn-success" style="width: 100%">Submit</button>
+				</div>
+				<h4 style="background:#ECEFF1; padding: 10px;">Typology Section</h4>
+				<div style="padding: 10px 20px;">
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Topology</option>
+						<option>All</option>
+						<option>FSW</option>
+					</select>
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Financial Year</option>
+						<option>2016-17</option>
+						<option>2017-18</option>
+					</select>
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Month</option>
+						<option>January</option>
+						<option>February</option>
+					</select>
+				
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Layer 1</option>
+						<option>Registered Kps</option>
+						<option>Newly Registered KPs</option>
+					</select>
+
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Layer 2</option>
+						<option>first year in sex work and below age 25 years,</option>
+						<option>On ART</option>
+					</select>
+
+					<select class="selectpicker" data-style="form-control btn-default btn-outline">
+						<option selected="true" disabled="true">Layer 3</option>
+						<option>Low condom use (not used condoms in 2/last 10 sex acts)</option>
+						<option>TB Positive</option>
+					</select>
+					<button class="btn  btn-success" style="width: 100%">Submit</button>
+				</div>
+			</div>
+			<!-- Area Section containere end -->
+
+			<!-- Legend1 container-->
+			<div id="legend_1_container">
+				<h3 style="background:#ECEFF1; padding: 10px;">Legend 1<a onclick="hide_legend();"><i class="zmdi zmdi-close" style="margin-left: 120px; font-size: 20px;"></i></a></h3>
+				<table class="table table-bordered" style="margin-left: 20px;margin-top:20px; width: 90%">
+                    <thead>
+                        <tr>
+                            <th>FSW</th>
+                            <th>MSM</th>
+                            <th>TG</th>
+                            <th>IDU</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>40</td>
+                            <td>30</td>
+                            <td>20</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+			<!-- Legend1 container end-->
+
+			<!-- Legend2 container-->
+			<div id="legend_2_container">
+				<h3 style="background:#ECEFF1; padding: 10px;">Legend 2<a onclick="hide_legend();"><i class="zmdi zmdi-close" style="margin-left: 120px; font-size: 20px;"></i></a></h3>
+				<table class="table table-bordered" style="margin-left: 20px;margin-top:20px; width: 90%">
+                    <thead>
+                        <tr>
+                            <th>FSW</th>
+                            <th>MSM</th>
+                            <th>TG</th>
+                            <th>IDU</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>40</td>
+                            <td>30</td>
+                            <td>20</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+			<!-- Legend1 container end -->
+
+			<!-- Legend3 container-->
+			<div id="legend_3_container">
+				<h3 style="background:#ECEFF1; padding: 10px;">Legend 3<a onclick="hide_legend();"><i class="zmdi zmdi-close" style="margin-left: 120px; font-size: 20px;"></i></a></h3>
+				<table class="table table-bordered" style="margin-left: 20px;margin-top:20px; width: 90%">
+                    <thead>
+                        <tr>
+                            <th>FSW</th>
+                            <th>MSM</th>
+                            <th>TG</th>
+                            <th>IDU</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>40</td>
+                            <td>30</td>
+                            <td>20</td>
+                            <td>10</td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+			<!-- Legend3 container-->
+
+			<!-- notification container-->
+			<div id="notification_container">
+				<h3 style="background:#ECEFF1; padding: 10px;">Notifications<a onclick="hide_elements();"><i class="zmdi zmdi-arrow-left" style="margin-left: 70px; font-size: 20px;"></i></a></h3>
+				<p>New notification message will be here...Odisha state new message...</p>
+				<hr class="light-grey-hr mb-10"/>
+				<p>New notification message will be here...MP state new message...</p>
+
+			</div>
+			<!-- notification container end -->
+			
+			<!-- zoom button for maps -->
+			<button class="btn btn-default btn-zoom" style="position: fixed;bottom: 40px;right: 10px;z-index: 999;border: 1px solid;padding: 2px 10px;">+</button>
+			<button class="btn btn-default btn-zoom" style="position: fixed;bottom: 10px;right: 10px;z-index: 999;border: 1px solid;padding: 2px 10px;">-</button>
+			<button class="btn btn-default btn-zoom" style="position: fixed;bottom: 70px;right: 10px;z-index: 999;border: 1px solid;padding: 2px 10px;"><i class="zmdi zmdi-fullscreen" style="color: #1c1c1c"></i></button>
+			<!-- zoom button for maps -->
+
+			<!-- legend Buttons -->
+			<button class="btn btn-warning btn-zoom" style="position: fixed;bottom: 10px;right: 50px;z-index: 999;border: 1px solid;padding: 2px 10px;border:none;" onclick="show_legend_1_container()"><i class="zmdi zmdi-collection-item-1" style="color: #1c1c1c"></i></button>
+			<button class="btn btn-primary btn-zoom" style="position: fixed;bottom: 10px;right: 90px;z-index: 999;border: 1px solid;padding: 2px 10px;border:none;" onclick="show_legend_2_container()"><i class="zmdi zmdi-collection-item-2" style="color: #1c1c1c"></i></button>
+			<button class="btn btn-danger btn-zoom" style="position: fixed;bottom: 10px;right: 130px;z-index: 999;border: 1px solid;padding: 2px 10px;border:none;" onclick="show_legend_3_container()"><i class="zmdi zmdi-collection-item-3" style="color: #1c1c1c"></i></button>
+			<!-- legend Buttons-->
+
+			
+			<!-- Main Content -->
+			<div class="page-wrapper">
+				<div class="container-fluid">
+					<!-- Row -->
+					<!-- map content -->
+					<div class="mapouter"><div class="gmap_canvas"><iframe width="2000" height="1000" id="gmap_canvas" src="https://maps.google.com/maps?q=Pune, Maharashtra, India&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.pureblack.de">pure black</a></div><style>.mapouter{overflow:hidden;height:1000px;width:2000px;}.gmap_canvas {background:none!important;height:1000px;width:2000;}</style></div>
+					<!-- map content end -->
+					<!-- /Row -->
+				</div>
+
+				<!-- Footer -->
+				<footer class="footer container-fluid pl-30 pr-30">
+					<div class="row">
+						<div class="col-sm-12">
+							<p>2017 &copy; Indictrans</p>
+						</div>
+					</div>
+				</footer>
+				<!-- /Footer -->
+			
+			</div>
+			<!-- /Main Content -->
+		
+		</div>
+		<!-- JavaScript -->
+		
+		<!-- jQuery -->
+		<script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
+
+		<!-- jQuery UI -->
+	  	<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		
+		<!-- Bootstrap Core JavaScript -->
+		<script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		
+		<!-- Bootstrap Select JavaScript -->
+		<script src="vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+		
+		<!-- Slimscroll JavaScript -->
+		<script src="dist/js/jquery.slimscroll.js"></script>
+		
+		<!-- Fancy Dropdown JS -->
+		<script src="dist/js/dropdown-bootstrap-extended.js"></script>
+		
+	
+		<!-- Init JavaScript -->
+		<script src="dist/js/init.js"></script>
+
+		<!-- custom javascripts -->
+		<script type="text/javascript">
+			function show_search_container() {
+				$( "#search_container" ).toggle( "slide" );
+				$("#dashboard_container").hide();
+				$("#area_section_container").hide();
+				$("#topology_section_container").hide();
+				$("#legend_1_container").hide();
+				$("#legend_2_container").hide();
+				$("#legend_3_container").hide();
+				$("#notification_container").hide();
+				
+				$("#li_search").css('background-color', '#2ECD99')
+				$("#li_dashboard").css('background-color', '#2A3E4C')
+				$("#li_area_section").css('background-color', '#2A3E4C')
+				$("#li_topology_section").css('background-color', '#2A3E4C')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2A3E4C')
+
+				
+			}
+
+			function show_dashboard_container() {
+				$("#search_container").hide();
+				$("#dashboard_container").toggle( "slide" );
+				$("#area_section_container").hide();
+				$("#topology_section_container").hide();
+				$("#legend_1_container").hide();
+				$("#legend_2_container").hide();
+				$("#legend_3_container").hide();
+				$("#notification_container").hide();
+				
+				$("#li_search").css('background-color', '#2A3E4C')
+				$("#li_dashboard").css('background-color', '#2ECD99')
+				$("#li_area_section").css('background-color', '#2A3E4C')
+				$("#li_topology_section").css('background-color', '#2A3E4C')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2A3E4C')
+			}
+
+			function show_area_section_container() {
+				$("#search_container").hide();
+				$("#dashboard_container").hide();
+				$("#area_section_container").toggle("slide");
+				$("#topology_section_container").hide();
+				$("#legend_1_container").hide();
+				$("#legend_2_container").hide();
+				$("#legend_3_container").hide();
+				$("#notification_container").hide();
+				
+				$("#li_search").css('background-color', '#2A3E4C')
+				$("#li_dashboard").css('background-color', '#2A3E4C')
+				$("#li_area_section").css('background-color', '#2ECD99')
+				$("#li_topology_section").css('background-color', '#2A3E4C')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2A3E4C')
+			}
+
+			function show_topology_section_container() {
+				$("#search_container").hide();
+				$("#dashboard_container").hide();
+				$("#area_section_container").hide();
+				$("#topology_section_container").toggle("slide");
+				$("#legend_1_container").hide();
+				$("#legend_2_container").hide();
+				$("#legend_3_container").hide();
+				$("#notification_container").hide();
+				
+				$("#li_search").css('background-color', '#2A3E4C')
+				$("#li_dashboard").css('background-color', '#2A3E4C')
+				$("#li_area_section").css('background-color', '#2A3E4C')
+				$("#li_topology_section").css('background-color', '#2ECD99')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2A3E4C')
+			}
+
+			function show_legend_1_container() {
+				$("#legend_1_container").toggle("collapse");
+				$("#legend_2_container").hide();
+				$("#legend_3_container").hide();
+			}
+
+			function show_legend_2_container() {
+				$("#legend_1_container").hide();
+				$("#legend_2_container").toggle("collapse");
+				$("#legend_3_container").hide();
+			}
+
+			function show_legend_3_container() {
+				$("#legend_1_container").hide();
+				$("#legend_2_container").hide();
+				$("#legend_3_container").toggle("collapse");
+			}
+
+			function show_notification_container() {
+				$("#search_container").hide();
+				$("#dashboard_container").hide();
+				$("#area_section_container").hide();
+				$("#topology_section_container").hide();
+				
+				$("#notification_badge").hide();
+				
+				$("#notification_container").toggle("slide");
+				
+				$("#li_search").css('background-color', '#2A3E4C')
+				$("#li_dashboard").css('background-color', '#2A3E4C')
+				$("#li_area_section").css('background-color', '#2A3E4C')
+				$("#li_topology_section").css('background-color', '#2A3E4C')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2ECD99')
+			}
+
+			
+			function hide_elements() {
+				$("#search_container").hide("slide");
+				$("#dashboard_container").hide("slide");
+				$("#area_section_container").hide("slide");
+				$("#topology_section_container").hide("slide");
+				$("#notification_container").hide("slide");
+
+				$("#li_search").css('background-color', '#2A3E4C')
+				$("#li_dashboard").css('background-color', '#2A3E4C')
+				$("#li_area_section").css('background-color', '#2A3E4C')
+				$("#li_topology_section").css('background-color', '#2A3E4C')
+				$("#li_legend_1").css('background-color', '#2A3E4C')
+				$("#li_legend_2").css('background-color', '#2A3E4C')
+				$("#li_legend_3").css('background-color', '#2A3E4C')
+				$("#li_notification").css('background-color', '#2A3E4C')
+			}
+
+			function hide_legend() {
+				$("#legend_1_container").hide("collapse");
+				$("#legend_2_container").hide("collapse");
+				$("#legend_3_container").hide("collapse");
+			}			
+
+			function show_search_results() {
+				$("#search_results").show();
+				$("#search_image").hide();
+			}
+		</script>
+	</body>
+</html>
