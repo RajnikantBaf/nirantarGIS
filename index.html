@@ -453,7 +453,6 @@
 				$("#legend_1_container").hide();
 				$("#legend_2_container").hide();
 				$("#legend_3_container").hide();
-				$("#notification_container").hide();
 				
 				$("#li_search").css('background-color', '#2ECD99')
 				$("#li_dashboard").css('background-color', '#2A3E4C')
@@ -475,7 +474,6 @@
 				$("#legend_1_container").hide();
 				$("#legend_2_container").hide();
 				$("#legend_3_container").hide();
-				$("#notification_container").hide();
 				
 				$("#li_search").css('background-color', '#2A3E4C')
 				$("#li_dashboard").css('background-color', '#2ECD99')
@@ -495,7 +493,6 @@
 				$("#legend_1_container").hide();
 				$("#legend_2_container").hide();
 				$("#legend_3_container").hide();
-				$("#notification_container").hide();
 				
 				$("#li_search").css('background-color', '#2A3E4C')
 				$("#li_dashboard").css('background-color', '#2A3E4C')
@@ -515,7 +512,6 @@
 				$("#legend_1_container").hide();
 				$("#legend_2_container").hide();
 				$("#legend_3_container").hide();
-				$("#notification_container").hide();
 				
 				$("#li_search").css('background-color', '#2A3E4C')
 				$("#li_dashboard").css('background-color', '#2A3E4C')
@@ -546,23 +542,7 @@
 			}
 
 			function show_notification_container() {
-				$("#search_container").hide();
-				$("#dashboard_container").hide();
-				$("#area_section_container").hide();
-				$("#topology_section_container").hide();
-				
-				$("#notification_badge").hide();
-				
-				$("#notification_container").toggle("slide");
-				
-				$("#li_search").css('background-color', '#2A3E4C')
-				$("#li_dashboard").css('background-color', '#2A3E4C')
-				$("#li_area_section").css('background-color', '#2A3E4C')
-				$("#li_topology_section").css('background-color', '#2A3E4C')
-				$("#li_legend_1").css('background-color', '#2A3E4C')
-				$("#li_legend_2").css('background-color', '#2A3E4C')
-				$("#li_legend_3").css('background-color', '#2A3E4C')
-				$("#li_notification").css('background-color', '#2ECD99')
+				$("#notification_container").toggle("collapse");
 			}
 
 			
@@ -571,8 +551,7 @@
 				$("#dashboard_container").hide("slide");
 				$("#area_section_container").hide("slide");
 				$("#topology_section_container").hide("slide");
-				$("#notification_container").hide("slide");
-
+				
 				$("#li_search").css('background-color', '#2A3E4C')
 				$("#li_dashboard").css('background-color', '#2A3E4C')
 				$("#li_area_section").css('background-color', '#2A3E4C')
